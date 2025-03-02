@@ -9,26 +9,18 @@ namespace FajrantModHelper.Commands
     public class EndConversationCommand : ICommand
     {
         public string Command => "koniec";
-        public string[] Aliases => new string[] { };
-        public string Description => "Kończy rozmowę i przywraca graczy do ich wcześniejszej roli.";
+        public string[] Aliases => new string[0];
+        public string Description => "Kończy rozmowę i przywraca graczy do wcześniejszych ról.";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (sender is not CommandSender commandSender)
+            if (sender is not CommandSender || Player.Get(sender) is not Player moderator)
             {
                 response = "Komenda dostępna tylko dla moderatorów!";
                 return false;
             }
 
-            Player moderator = Player.Get(sender);
-            if (moderator == null)
-            {
-                response = "Nie udało się znaleźć moderatora!";
-                return false;
-            }
-
             Player targetPlayer = Plugin.Instance.MonitoredPlayers.FirstOrDefault(p => p.Role.Type == RoleTypeId.Tutorial);
-            Player.TryGet(targetPlayer.Id, out targetPlayer);
             if (targetPlayer == null)
             {
                 response = "Nie znaleziono gracza do przywrócenia!";
@@ -37,9 +29,9 @@ namespace FajrantModHelper.Commands
 
             RestorePlayerState(targetPlayer);
             RestorePlayerState(moderator);
-
             Plugin.Instance.MonitoredPlayers.Remove(targetPlayer);
-            response = "Rozmowa zakończona. Obaj gracze zostali przywróceni do pierwotnych ról, ekwipunku i pozycji.";
+
+            response = "Rozmowa zakończona. Gracze zostali przywróceni do pierwotnych ról.";
             return true;
         }
 
