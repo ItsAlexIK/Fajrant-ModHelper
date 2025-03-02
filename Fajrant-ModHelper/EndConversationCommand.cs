@@ -27,7 +27,8 @@ namespace FajrantModHelper.Commands
                 return false;
             }
 
-            Player targetPlayer = Player.List.FirstOrDefault(p => p.Role.Type == RoleTypeId.Tutorial && Plugin.Instance.MonitoredPlayers.Contains(p));
+            Player targetPlayer = Plugin.Instance.MonitoredPlayers.FirstOrDefault(p => p.Role.Type == RoleTypeId.Tutorial);
+            Player.TryGet(targetPlayer.Id, out targetPlayer);
             if (targetPlayer == null)
             {
                 response = "Nie znaleziono gracza do przywrócenia!";
