@@ -30,13 +30,12 @@ namespace FajrantModHelper
                 string message = $"[TEAMKILL] {ev.Attacker.Nickname} ({ev.Attacker.Role.Type}) zabił {ev.Player.Nickname} ({ev.Player.Role.Type})";
 
                 ServerConsole.AddLog(message, ConsoleColor.Red);
-                Map.Broadcast(10, $"<color=red>{message}</color>", Broadcast.BroadcastFlags.AdminChat);
 
                 foreach (var admin in Player.List)
                 {
                     if (admin.CheckPermission("admin.chat"))
                     {
-                        admin.ShowHint($"<color=red>{message}</color>", 5);
+                        admin.ShowHint($"<color=red>{message}</color>", 15);
                     }
                 }
             }
