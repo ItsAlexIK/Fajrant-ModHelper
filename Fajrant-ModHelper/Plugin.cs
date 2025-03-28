@@ -49,7 +49,7 @@ namespace FajrantModHelper
             BanManager.OfflineBanPlayer(BanHandler.BanType.UserId, ev.Player.UserId, "Ucieczka - Odwołać możesz się na Discordzie", TimeSpan.FromDays(30), ev.Player.Nickname);
             BanManager.OfflineBanPlayer(BanHandler.BanType.IP, ev.Player.IPAddress, "Ucieczka - Odwołać możesz się na Discordzie", TimeSpan.FromDays(30), ev.Player.Nickname);
             PlayerBackup.Remove(ev.Player.UserId);
-            Log.Info($"Gracz {ev.Player.Nickname} ({ev.Player.UserId}) został automatycznie zbanowany na 30 dni za opuszczenie serwera.");
+            Map.Broadcast(10, $"{ev.Player.Nickname} został zbanowany!");
         }
     }
 }
