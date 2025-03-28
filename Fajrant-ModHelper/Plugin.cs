@@ -10,7 +10,7 @@ namespace FajrantModHelper
         public override string Author => "ItsAlex";
         public override Version Version => new(1, 0, 6);
         public static Plugin Instance { get; private set; }
-
+        private TeamKillHandler teamKillHandler;
         public HashSet<string> BannedPlayers { get; } = new();
         public HashSet<Player> MonitoredPlayers { get; } = new();
         public Dictionary<string, PlayerBackupData> PlayerBackup { get; } = new();
@@ -19,6 +19,8 @@ namespace FajrantModHelper
         {
             Instance = this;
             Log.Info("ModHelper enabled!");
+            teamKillHandler = new TeamKillHandler();
+            teamKillHandler.Register();
             Exiled.Events.Handlers.Player.Left += OnPlayerLeft;
             Exiled.Events.Handlers.Player.Banned += OnPlayerBanned;
         }
@@ -27,6 +29,7 @@ namespace FajrantModHelper
         {
             Instance = null;
             Log.Info("ModHelper disabled!");
+            teamKillHandler.Unregister();
             Exiled.Events.Handlers.Player.Left -= OnPlayerLeft;
             Exiled.Events.Handlers.Player.Banned -= OnPlayerBanned;
             MonitoredPlayers.Clear();
