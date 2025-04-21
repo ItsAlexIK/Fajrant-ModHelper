@@ -27,15 +27,21 @@ namespace FajrantModHelper
 
             if (ev.Attacker.Role.Side == ev.Player.Role.Side)
             {
-                string message = $"[TEAMKILL] {ev.Attacker.Nickname} ({ev.Attacker.Role.Type}) zabił {ev.Player.Nickname} ({ev.Player.Role.Type})";
+                string attackerName = ev.Attacker.Nickname;
+                string attackerRole = ev.Attacker.Role.Name;
+                string victimName = ev.Player.Nickname;
+                string victimRole = ev.Player.Role.Name;
 
-                ServerConsole.AddLog(message, ConsoleColor.Red);
+                string message = $"\n\n[TEAMKILL] {attackerName} zabił {victimName}";
+                string detailed = $"{attackerName} ({attackerRole}) zabił {victimName} ({victimRole})";
+
+                ServerConsole.AddLog($"[TEAMKILL] {detailed}", ConsoleColor.Red);
 
                 foreach (var admin in Player.List)
                 {
                     if (admin.CheckPermission("admin.chat"))
                     {
-                        admin.ShowHint($"<color=red>{message}</color>", 15);
+                        admin.ShowHint($"<color=red>{message}</color>", 8);
                     }
                 }
             }
