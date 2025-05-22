@@ -1,4 +1,4 @@
-﻿using CommandSystem;
+using CommandSystem;
 using Exiled.API.Features;
 using PlayerRoles;
 using System.Linq;
@@ -20,18 +20,30 @@ namespace FajrantModHelper.Commands
                 return false;
             }
 
-            Player targetPlayer = Plugin.Instance.MonitoredPlayers.FirstOrDefault(p => p.Role.Type == RoleTypeId.Tutorial);
-            if (targetPlayer == null)
+            var targetPlayer = Plugin.Instance.MonitoredPlayers.FirstOrDefault(p => p.Role.Type == RoleTypeId.Tutorial);
+
+            bool restoredAnyone = false;
+
+            if (targetPlayer != null && Plugin.Instance.PlayerBackup.ContainsKey(targetPlayer.UserId))
             {
-                response = "Nie znaleziono gracza do przywrócenia!";
+                RestorePlayerState(targetPlayer);
+                Plugin.Instance.MonitoredPlayers.Remove(targetPlayer);
+                restoredAnyone = true;
+            }
+
+            if (Plugin.Instance.PlayerBackup.ContainsKey(moderator.UserId))
+            {
+                RestorePlayerState(moderator);
+                restoredAnyone = true;
+            }
+
+            if (!restoredAnyone)
+            {
+                response = "Nie znaleziono żadnych danych do przywrócenia.";
                 return false;
             }
 
-            RestorePlayerState(targetPlayer);
-            RestorePlayerState(moderator);
-            Plugin.Instance.MonitoredPlayers.Remove(targetPlayer);
-
-            response = "Rozmowa zakończona. Gracze zostali przywróceni do pierwotnych ról.";
+            response = "Zakończono rozmowę. Przywrócono dostępne stany graczy.";
             return true;
         }
 
